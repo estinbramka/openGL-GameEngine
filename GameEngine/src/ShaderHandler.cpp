@@ -115,7 +115,7 @@ void ShaderHandler::Scale()
 {
 	static float scale = 0.0f;
 
-	scale += 0.002f;
+	scale += 0.001f;
 
 	glUniform1f(gScaleLocation, sinf(scale));
 }
