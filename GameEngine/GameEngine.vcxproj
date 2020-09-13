@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\ModelHandler.cpp" />
     <ClCompile Include="src\ShaderHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +142,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ModelHandler.h" />
     <ClInclude Include="src\ShaderHandler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

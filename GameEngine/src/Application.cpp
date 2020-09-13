@@ -2,10 +2,12 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "ShaderHandler.h"
+#include "ModelHandler.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
 GLuint VBO;
+GLuint IBO;
 
 int main(void)
 {
@@ -36,23 +38,20 @@ int main(void)
 	printf("GL version: %s\n", glGetString(GL_VERSION));
 
 	//----------------------------------------------------------------------------------------------------------------------------
-	glm::vec3 Vertices[3];
+	glm::vec3 Vertices[4];
 	Vertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
-	Vertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
-	Vertices[2] = glm::vec3(0.0f, 1.0f, 0.0f);
-	/*
-	float Vertices[3*3] = 
-	{	-1.0f, -1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
-	};
-	*/
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
+	Vertices[1] = glm::vec3(0.0f, -1.0f, 1.0f);
+	Vertices[2] = glm::vec3(1.0f, -1.0f, 0.0f);
+	Vertices[3] = glm::vec3(0.0f, 1.0f, 0.0f);
 
-	ShaderHandler test;
-	test.CompileShaders();
+	unsigned int Indices[] = { 0, 3, 1,
+							   1, 3, 2,
+							   2, 3, 0,
+							   0, 1, 2 };
+
+	ShaderHandler shaderHandler;
+	GLuint shaderProgram = shaderHandler.CompileShaders();
+	ModelHandler modelHandler(shaderProgram, Vertices, Indices, sizeof(Vertices), sizeof(Indices));
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
@@ -62,12 +61,8 @@ int main(void)
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		test.Scale();
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glDisableVertexAttribArray(0);
+		modelHandler.Animation();
+		modelHandler.Draw();
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/* Swap front and back buffers */

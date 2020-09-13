@@ -12,7 +12,7 @@ ShaderHandler::ShaderHandler(std::string _vs, std::string _fs)
 	fs = _fs;
 }
 
-void ShaderHandler::CompileShaders()
+GLuint ShaderHandler::CompileShaders()
 {
 	ShaderProgram = glCreateProgram();
 
@@ -52,11 +52,7 @@ void ShaderHandler::CompileShaders()
 
 	glUseProgram(ShaderProgram);
 
-	gScaleLocation = glGetUniformLocation(ShaderProgram, "gScale");
-	if (gScaleLocation == -1)
-	{
-		fprintf(stderr, "Error with glGetUniformLocation\n");
-	}
+	return ShaderProgram;
 }
 
 bool ShaderHandler::ReadFile(std::string fileName, std::string & outFile)
@@ -109,13 +105,4 @@ void ShaderHandler::AddShader(GLuint ShaderProgram, std::string shaderText, GLen
 	}
 
 	glAttachShader(ShaderProgram, ShaderObj);
-}
-
-void ShaderHandler::Scale()
-{
-	static float scale = 0.0f;
-
-	scale += 0.001f;
-
-	glUniform1f(gScaleLocation, sinf(scale));
 }
