@@ -142,6 +142,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Definitions.h" />
     <ClInclude Include="src\ModelHandler.h" />
     <ClInclude Include="src\ShaderHandler.h" />
   </ItemGroup>

@@ -33,13 +33,38 @@ void ModelHandler::Animation()
 {
 	static float Scale = 0.0f;
 
-	Scale += 0.001f;
+	Scale += 0.1f;
+	
+	//ModelHandler::Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
+	//ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
+	//ModelHandler::Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+	
 
-	ModelHandler::Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
-	ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
-	ModelHandler::Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+	ModelHandler::Rotate(0.0f, Scale, 0.0f);
+	ModelHandler::WorldPos(0.0f, 0.0f, 3.0f);
 
 	ModelHandler::GetWorldTransformation();
+
+	glm::mat4 Projection = glm::perspective(glm::radians(60.0f), WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 100.0f);
+	//Projection[2][3] = 1;
+	/*
+	for (int i = 0;i < 4;i++)
+	{
+		for (int j = 0;j < 4;j++)
+		{
+			std::cout << Projection[j][i] << " ";
+		}
+		std::cout << std::endl;
+	}
+	*/
+
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -3.0f);
+	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 2.0f);
+	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	glm::mat4 view;
+	view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+
+	m_WorldTransformation = Projection * view * m_WorldTransformation;
 
 	glUniformMatrix4fv(gWorldLocation, 1, GL_FALSE, &m_WorldTransformation[0][0]);
 }
@@ -74,9 +99,9 @@ glm::mat4 ModelHandler::GetWorldTransformation()
 {
 	m_WorldTransformation = glm::mat4(1.0f);
 	m_WorldTransformation = glm::translate(m_WorldTransformation, m_WorldPos);
-	m_WorldTransformation = glm::rotate(m_WorldTransformation, ToRadian(m_Rotate.z), glm::vec3(0.0f, 0.0f, 1.0f));
-	m_WorldTransformation = glm::rotate(m_WorldTransformation, ToRadian(m_Rotate.y), glm::vec3(0.0f, -1.0f, 0.0f));
-	m_WorldTransformation = glm::rotate(m_WorldTransformation, ToRadian(m_Rotate.x), glm::vec3(1.0f, 0.0f, 0.0f));
+	m_WorldTransformation = glm::rotate(m_WorldTransformation, glm::radians(m_Rotate.z), glm::vec3(0.0f, 0.0f, 1.0f));
+	m_WorldTransformation = glm::rotate(m_WorldTransformation, glm::radians(m_Rotate.y), glm::vec3(0.0f, 1.0f, 0.0f));
+	m_WorldTransformation = glm::rotate(m_WorldTransformation, glm::radians(m_Rotate.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	m_WorldTransformation = glm::scale(m_WorldTransformation, m_Scale);
 
 	return m_WorldTransformation;

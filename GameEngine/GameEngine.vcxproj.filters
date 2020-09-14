@@ -36,5 +36,8 @@
     <ClInclude Include="src\ModelHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Definitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

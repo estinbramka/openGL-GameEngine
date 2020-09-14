@@ -5,6 +5,7 @@
 #include "ModelHandler.h"
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
+#include "Definitions.h"
 
 GLuint VBO;
 GLuint IBO;
@@ -18,7 +19,7 @@ int main(void)
 		return -1;
 
 	/* Create a windowed mode window and its OpenGL context */
-	window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+	window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello World", NULL, NULL);
 	if (!window)
 	{
 		glfwTerminate();
@@ -39,9 +40,9 @@ int main(void)
 
 	//----------------------------------------------------------------------------------------------------------------------------
 	glm::vec3 Vertices[4];
-	Vertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
-	Vertices[1] = glm::vec3(0.0f, -1.0f, 1.0f);
-	Vertices[2] = glm::vec3(1.0f, -1.0f, 0.0f);
+	Vertices[0] = glm::vec3(-1.0f, -1.0f, 0.5773f);
+	Vertices[1] = glm::vec3(0.0f, -1.0f, -1.15475f);
+	Vertices[2] = glm::vec3(1.0f, -1.0f, 0.5773f);
 	Vertices[3] = glm::vec3(0.0f, 1.0f, 0.0f);
 
 	unsigned int Indices[] = { 0, 3, 1,
