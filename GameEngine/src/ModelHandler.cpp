@@ -20,13 +20,18 @@ ModelHandler::ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigne
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeIndices, pIndices, GL_STATIC_DRAW);
 
-	gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
-	if (gWorldLocation == -1)
+	gCameraLocation = glGetUniformLocation(ShaderProgram, "gCamera");
+	if (gCameraLocation == -1)
 	{
 		fprintf(stderr, "Error with glGetUniformLocation\n");
 	}
+
 	ModelHandler::GetWorldTransformation();
-	glUniformMatrix4fv(gWorldLocation, 1, GL_FALSE, &m_WorldTransformation[0][0]);
+	ModelHandler::GetProjectionTransformation();
+	ModelHandler::GetCameraTransformation();
+	m_Transformation = m_ProjectionTransformation * m_CameraTransformation * m_WorldTransformation;
+
+	glUniformMatrix4fv(gCameraLocation, 1, GL_FALSE, &m_Transformation[0][0]);
 }
 
 void ModelHandler::Animation()
@@ -38,35 +43,14 @@ void ModelHandler::Animation()
 	//ModelHandler::Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
 	//ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
 	//ModelHandler::Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
-	
-
 	ModelHandler::Rotate(0.0f, Scale, 0.0f);
 	ModelHandler::WorldPos(0.0f, 0.0f, 3.0f);
 
 	ModelHandler::GetWorldTransformation();
 
-	glm::mat4 Projection = glm::perspective(glm::radians(60.0f), WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 100.0f);
-	//Projection[2][3] = 1;
-	/*
-	for (int i = 0;i < 4;i++)
-	{
-		for (int j = 0;j < 4;j++)
-		{
-			std::cout << Projection[j][i] << " ";
-		}
-		std::cout << std::endl;
-	}
-	*/
+	m_Transformation = m_ProjectionTransformation * m_CameraTransformation * m_WorldTransformation;
 
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -3.0f);
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 2.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	glm::mat4 view;
-	view = glm::lookAt(cameraPos, cameraTarget, cameraUp);
-
-	m_WorldTransformation = Projection * view * m_WorldTransformation;
-
-	glUniformMatrix4fv(gWorldLocation, 1, GL_FALSE, &m_WorldTransformation[0][0]);
+	glUniformMatrix4fv(gCameraLocation, 1, GL_FALSE, &m_Transformation[0][0]);
 }
 
 void ModelHandler::Draw()
@@ -105,4 +89,22 @@ glm::mat4 ModelHandler::GetWorldTransformation()
 	m_WorldTransformation = glm::scale(m_WorldTransformation, m_Scale);
 
 	return m_WorldTransformation;
+}
+
+glm::mat4 ModelHandler::GetProjectionTransformation()
+{
+	m_ProjectionTransformation = glm::perspective(glm::radians(60.0f), WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 100.0f);
+
+	return m_ProjectionTransformation;
+}
+
+glm::mat4 ModelHandler::GetCameraTransformation()
+{
+	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -3.0f);
+	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 2.0f);
+	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+
+	m_CameraTransformation = glm::lookAt(cameraPos, cameraTarget, cameraUp);
+
+	return m_CameraTransformation;
 }
