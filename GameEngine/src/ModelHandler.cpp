@@ -1,12 +1,13 @@
 #include "ModelHandler.h"
 
-ModelHandler::ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices)
+ModelHandler::ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *_camera)
 {
 	ShaderProgram = _ShaderProgram;
 	pVertices = _pVertices;
 	pIndices = _pIndices;
 	sizeVertices = _sizeVertices;
 	sizeIndices = _sizeIndices;
+	camera = _camera;
 
 	m_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
 	m_WorldPos = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -28,17 +29,17 @@ ModelHandler::ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigne
 
 	ModelHandler::GetWorldTransformation();
 	ModelHandler::GetProjectionTransformation();
-	ModelHandler::GetCameraTransformation();
+	m_CameraTransformation = camera->GetTransformation();
 	m_Transformation = m_ProjectionTransformation * m_CameraTransformation * m_WorldTransformation;
 
 	glUniformMatrix4fv(gCameraLocation, 1, GL_FALSE, &m_Transformation[0][0]);
 }
 
-void ModelHandler::Animation()
+void ModelHandler::Animation(float deltaTime)
 {
 	static float Scale = 0.0f;
 
-	Scale += 0.1f;
+	Scale += deltaTime*150;
 	
 	//ModelHandler::Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
 	//ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
@@ -47,6 +48,8 @@ void ModelHandler::Animation()
 	ModelHandler::WorldPos(0.0f, 0.0f, 3.0f);
 
 	ModelHandler::GetWorldTransformation();
+
+	m_CameraTransformation = camera->GetTransformation();
 
 	m_Transformation = m_ProjectionTransformation * m_CameraTransformation * m_WorldTransformation;
 
@@ -96,15 +99,4 @@ glm::mat4 ModelHandler::GetProjectionTransformation()
 	m_ProjectionTransformation = glm::perspective(glm::radians(60.0f), WINDOW_WIDTH / (float)WINDOW_HEIGHT, 1.0f, 100.0f);
 
 	return m_ProjectionTransformation;
-}
-
-glm::mat4 ModelHandler::GetCameraTransformation()
-{
-	glm::vec3 cameraPos = glm::vec3(0.0f, 0.0f, -3.0f);
-	glm::vec3 cameraTarget = glm::vec3(0.0f, 0.0f, 2.0f);
-	glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	m_CameraTransformation = glm::lookAt(cameraPos, cameraTarget, cameraUp);
-
-	return m_CameraTransformation;
 }

@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "Definitions.h"
+#include "Camera.h"
 
 class ModelHandler
 {
@@ -21,16 +22,16 @@ private:
 	glm::mat4 m_ProjectionTransformation;
 	glm::mat4 m_CameraTransformation;
 	glm::mat4 m_Transformation;
+	Camera *camera;
 
 public:
-	ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices);
-	void Animation();
+	ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *camera);
+	void Animation(float deltaTime);
 	void Draw();
 	void Scale(float x, float y, float z);
 	void WorldPos(float x, float y, float z);
 	void Rotate(float x, float y, float z);
 	glm::mat4 GetWorldTransformation();
 	glm::mat4 GetProjectionTransformation();
-	glm::mat4 GetCameraTransformation();
 
 };

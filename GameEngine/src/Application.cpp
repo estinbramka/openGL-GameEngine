@@ -6,9 +6,14 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include "Definitions.h"
+#include "Camera.h"
 
-GLuint VBO;
-GLuint IBO;
+void ProcessInput(GLFWwindow* window);
+
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
+Camera *camera;
 
 int main(void)
 {
@@ -52,17 +57,26 @@ int main(void)
 
 	ShaderHandler shaderHandler;
 	GLuint shaderProgram = shaderHandler.CompileShaders();
-	ModelHandler modelHandler(shaderProgram, Vertices, Indices, sizeof(Vertices), sizeof(Indices));
+	camera = new Camera();
+	ModelHandler modelHandler(shaderProgram, Vertices, Indices, sizeof(Vertices), sizeof(Indices), camera);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
+		/*Time logic here*/
+		float currentFrame = (float)glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		/*Keyboard Input here*/
+		ProcessInput(window);
+
 		/* Render here */
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-		modelHandler.Animation();
+		modelHandler.Animation(deltaTime);
 		modelHandler.Draw();
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -75,4 +89,19 @@ int main(void)
 
 	glfwTerminate();
 	return 0;
+}
+
+void ProcessInput(GLFWwindow * window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+		camera->ProcessKeyboard('W', deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+		camera->ProcessKeyboard('S', deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+		camera->ProcessKeyboard('A', deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+		camera->ProcessKeyboard('D', deltaTime);
 }
