@@ -1,3 +1,3 @@
 # openGL-GameEngine
 
-Use the W and S key to navigate.
+Use the WASD and mouse to navigate

@@ -9,6 +9,7 @@
 #include "Camera.h"
 
 void ProcessInput(GLFWwindow* window);
+void Mouse_Callback(GLFWwindow* window, double xpos, double ypos);
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -57,7 +58,11 @@ int main(void)
 
 	ShaderHandler shaderHandler;
 	GLuint shaderProgram = shaderHandler.CompileShaders();
+
 	camera = new Camera();
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetCursorPosCallback(window, Mouse_Callback);
+
 	ModelHandler modelHandler(shaderProgram, Vertices, Indices, sizeof(Vertices), sizeof(Indices), camera);
 	//----------------------------------------------------------------------------------------------------------------------------
 
@@ -104,4 +109,24 @@ void ProcessInput(GLFWwindow * window)
 		camera->ProcessKeyboard('A', deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera->ProcessKeyboard('D', deltaTime);
+}
+
+void Mouse_Callback(GLFWwindow * window, double xpos, double ypos)
+{
+	static bool firstMouse = true;
+	static float lastX, lastY;
+	if (firstMouse)
+	{
+		lastX = (float)xpos;
+		lastY = (float)ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = (float)xpos - lastX;
+	float yoffset = lastY - (float)ypos;
+
+	lastX = (float)xpos;
+	lastY = (float)ypos;
+	std::cout << xoffset << " - " << yoffset << std::endl;
+	camera->ProsessMouse(xoffset, yoffset);
 }

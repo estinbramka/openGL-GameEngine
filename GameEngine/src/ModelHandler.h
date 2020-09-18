@@ -19,7 +19,6 @@ private:
 	GLuint VBO, IBO;
 	glm::vec3 m_Scale, m_WorldPos, m_Rotate;
 	glm::mat4 m_WorldTransformation;
-	glm::mat4 m_ProjectionTransformation;
 	glm::mat4 m_CameraTransformation;
 	glm::mat4 m_Transformation;
 	Camera *camera;
@@ -32,6 +31,5 @@ public:
 	void WorldPos(float x, float y, float z);
 	void Rotate(float x, float y, float z);
 	glm::mat4 GetWorldTransformation();
-	glm::mat4 GetProjectionTransformation();
 
 };
