@@ -7,13 +7,14 @@
 #include <glm/ext.hpp>
 #include "Definitions.h"
 #include "Camera.h"
+#include <stb_image.h>
 
 class ModelHandler
 {
 private:
 	GLuint ShaderProgram;
 	GLuint gCameraLocation;
-	glm::vec3 *pVertices;
+	float *pVertices;
 	unsigned int *pIndices;
 	size_t sizeVertices, sizeIndices;
 	GLuint VBO, IBO;
@@ -22,14 +23,16 @@ private:
 	glm::mat4 m_CameraTransformation;
 	glm::mat4 m_Transformation;
 	Camera *camera;
+	GLuint texture, gSampler;
 
 public:
-	ModelHandler(GLuint _ShaderProgram, glm::vec3 *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *camera);
+	ModelHandler(GLuint _ShaderProgram, float *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *camera);
 	void Animation(float deltaTime);
 	void Draw();
 	void Scale(float x, float y, float z);
 	void WorldPos(float x, float y, float z);
 	void Rotate(float x, float y, float z);
 	glm::mat4 GetWorldTransformation();
+	void LoadTextures(std::string texturePath, GLenum format);
 
 };

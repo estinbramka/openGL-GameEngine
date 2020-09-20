@@ -47,19 +47,14 @@ int main(void)
 	printf("GL version: %s\n", glGetString(GL_VERSION));
 
 	//----------------------------------------------------------------------------------------------------------------------------
-	glm::vec3 Vertices[4];
-	Vertices[0] = glm::vec3(-1.0f, -1.0f, 0.5773f);
-	Vertices[1] = glm::vec3(0.0f, -1.0f, -1.15475f);
-	Vertices[2] = glm::vec3(1.0f, -1.0f, 0.5773f);
-	Vertices[3] = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	glm::vec2 TextureCoo[4];
-
-	TextureCoo[0] = glm::vec2(0.0f, 0.0f);
-	TextureCoo[1] = glm::vec2(0.5f, 0.0f);
-	TextureCoo[2] = glm::vec2(1.0f, 0.0f);
-	TextureCoo[3] = glm::vec2(0.5f, 1.0f);
-
+	float Vertices[4*3+4*2]= {
+		// positions                 // texture coords
+		-1.0f, -1.0f, 0.5773f,		 0.0f, 0.0f, // top right
+		0.0f, -1.0f, -1.15475f,		 0.5f, 0.0f, // bottom right
+		1.0f, -1.0f, 0.5773f,		 1.0f, 0.0f, // bottom left
+		0.0f, 1.0f, 0.0f,			 0.5f, 1.0f  // top left 
+	};
+	
 	unsigned int Indices[] = { 0, 3, 1,
 							   1, 3, 2,
 							   2, 3, 0,
@@ -78,34 +73,7 @@ int main(void)
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
-	unsigned int texture;
-	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
-	int width, height, nrChannels;
-	const char *texturePath = "res/textures/test.png";
-	unsigned char *data = stbi_load(texturePath, &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
-	GLuint gSampler;
-	gSampler = glGetUniformLocation(shaderProgram, "gSampler");
-	glUniform1i(gSampler, 0);
-
-
+	modelHandler.LoadTextures("res/textures/test.png", GL_RGBA);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
@@ -124,12 +92,7 @@ int main(void)
 
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		modelHandler.Animation(deltaTime);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(TextureCoo), 0);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
 		modelHandler.Draw();
-		glDisableVertexAttribArray(1);
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/* Swap front and back buffers */
@@ -174,6 +137,6 @@ void Mouse_Callback(GLFWwindow * window, double xpos, double ypos)
 
 	lastX = (float)xpos;
 	lastY = (float)ypos;
-	std::cout << xoffset << " - " << yoffset << std::endl;
+	//std::cout << xoffset << " - " << yoffset << std::endl;
 	camera->ProsessMouse(xoffset, yoffset);
 }
