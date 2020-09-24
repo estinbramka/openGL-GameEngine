@@ -74,6 +74,14 @@ int main(void)
 	glEnable(GL_CULL_FACE);
 
 	modelHandler.LoadTextures("res/textures/test.png", GL_RGBA);
+
+	/*lighting test*/
+	GLuint m_dirLightColorLocation;
+	GLuint m_dirLightAmbientIntensityLocation;
+	m_dirLightColorLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.Color");
+	m_dirLightAmbientIntensityLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.AmbientIntensity");
+	glUniform3f(m_dirLightColorLocation, 1.0f, 1.0f, 1.0f);
+	glUniform1f(m_dirLightAmbientIntensityLocation, 0.5f);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
