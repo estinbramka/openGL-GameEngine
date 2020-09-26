@@ -47,12 +47,19 @@ int main(void)
 	printf("GL version: %s\n", glGetString(GL_VERSION));
 
 	//----------------------------------------------------------------------------------------------------------------------------
-	float Vertices[4*3+4*2]= {
+	/*float Vertices[4*3+4*2]= {
 		// positions                 // texture coords
 		-1.0f, -1.0f, 0.5773f,		 0.0f, 0.0f, // top right
 		0.0f, -1.0f, -1.15475f,		 0.5f, 0.0f, // bottom right
 		1.0f, -1.0f, 0.5773f,		 1.0f, 0.0f, // bottom left
 		0.0f, 1.0f, 0.0f,			 0.5f, 1.0f  // top left 
+	};*/
+
+	Vertex Vertices[] = {
+		{glm::vec3(-1.0f, -1.0f,  0.5773f),	glm::vec2(0.0f, 0.0f)},
+		{glm::vec3(0.0f, -1.0f, -1.15475f),	glm::vec2(0.5f, 0.0f)},
+		{glm::vec3(1.0f, -1.0f,  0.5773f),	glm::vec2(1.0f, 0.0f)},
+		{glm::vec3(0.0f,  1.0f,  0.0f),		glm::vec2(0.5f, 1.0f)}
 	};
 	
 	unsigned int Indices[] = { 0, 3, 1,
@@ -78,10 +85,16 @@ int main(void)
 	/*lighting test*/
 	GLuint m_dirLightColorLocation;
 	GLuint m_dirLightAmbientIntensityLocation;
+	GLuint m_dirLightLocationDirection;
+	GLuint m_dirLightLocationDiffuseIntensity;
 	m_dirLightColorLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.Color");
 	m_dirLightAmbientIntensityLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.AmbientIntensity");
+	m_dirLightLocationDirection = glGetUniformLocation(shaderProgram, "gDirectionalLight.Direction");
+	m_dirLightLocationDiffuseIntensity = glGetUniformLocation(shaderProgram, "gDirectionalLight.DiffuseIntensity");
 	glUniform3f(m_dirLightColorLocation, 1.0f, 1.0f, 1.0f);
-	glUniform1f(m_dirLightAmbientIntensityLocation, 0.5f);
+	glUniform1f(m_dirLightAmbientIntensityLocation, 0.1f);
+	glUniform3f(m_dirLightLocationDirection, 1.0f, 0.0f, 0.0f);
+	glUniform1f(m_dirLightLocationDiffuseIntensity, 0.75f);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */

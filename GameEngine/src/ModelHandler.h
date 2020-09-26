@@ -13,8 +13,8 @@ class ModelHandler
 {
 private:
 	GLuint ShaderProgram;
-	GLuint gCameraLocation;
-	float *pVertices;
+	GLuint gWVPLocation, gWorldLocation;
+	Vertex *pVertices;
 	unsigned int *pIndices;
 	size_t sizeVertices, sizeIndices;
 	GLuint VBO, IBO;
@@ -24,9 +24,10 @@ private:
 	glm::mat4 m_Transformation;
 	Camera *camera;
 	GLuint texture, gSampler;
+	void CalcNormals();
 
 public:
-	ModelHandler(GLuint _ShaderProgram, float *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *camera);
+	ModelHandler(GLuint _ShaderProgram, Vertex *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *camera);
 	void Animation(float deltaTime);
 	void Draw();
 	void Scale(float x, float y, float z);
