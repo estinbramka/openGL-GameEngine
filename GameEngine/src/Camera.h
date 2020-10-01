@@ -23,5 +23,6 @@ public:
 	void ProcessKeyboard(char key, float deltaTime);
 	void ProsessMouse(float xoffset, float yoffset);
 	glm::mat4 GetTransformation();
+	glm::vec3 GetPosition();
 
 };

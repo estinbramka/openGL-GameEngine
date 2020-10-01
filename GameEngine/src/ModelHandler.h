@@ -13,7 +13,7 @@ class ModelHandler
 {
 private:
 	GLuint ShaderProgram;
-	GLuint gWVPLocation, gWorldLocation;
+	GLuint gWVPLocation, gWorldLocation, gEyeWorldPosLocation;
 	Vertex *pVertices;
 	unsigned int *pIndices;
 	size_t sizeVertices, sizeIndices;

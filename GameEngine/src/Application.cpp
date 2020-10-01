@@ -87,14 +87,20 @@ int main(void)
 	GLuint m_dirLightAmbientIntensityLocation;
 	GLuint m_dirLightLocationDirection;
 	GLuint m_dirLightLocationDiffuseIntensity;
+	GLuint m_matSpecularIntensityLocation;
+	GLuint m_matSpecularPowerLocation;
 	m_dirLightColorLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.Color");
 	m_dirLightAmbientIntensityLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.AmbientIntensity");
 	m_dirLightLocationDirection = glGetUniformLocation(shaderProgram, "gDirectionalLight.Direction");
 	m_dirLightLocationDiffuseIntensity = glGetUniformLocation(shaderProgram, "gDirectionalLight.DiffuseIntensity");
+	m_matSpecularIntensityLocation = glGetUniformLocation(shaderProgram, "gMatSpecularIntensity");
+	m_matSpecularPowerLocation = glGetUniformLocation(shaderProgram, "gSpecularPower");
 	glUniform3f(m_dirLightColorLocation, 1.0f, 1.0f, 1.0f);
 	glUniform1f(m_dirLightAmbientIntensityLocation, 0.1f);
 	glUniform3f(m_dirLightLocationDirection, 1.0f, 0.0f, 0.0f);
 	glUniform1f(m_dirLightLocationDiffuseIntensity, 0.75f);
+	glUniform1f(m_matSpecularIntensityLocation, 1.0f);
+	glUniform1f(m_matSpecularPowerLocation, 32);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */

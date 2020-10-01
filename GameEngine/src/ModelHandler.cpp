@@ -17,12 +17,12 @@ void ModelHandler::CalcNormals()
 		pVertices[Index2].normal += Normal;
 	}
 
-	std::cout << (sizeIndices / sizeof(unsigned int)) << "-" << (sizeVertices / (8*sizeof(float))) << "\n";
+	//std::cout << (sizeIndices / sizeof(unsigned int)) << "-" << (sizeVertices / (8*sizeof(float))) << "\n";
 
 	// Normalize all the vertex normals
 	for (unsigned int i = 0; i < (sizeVertices / (8 * sizeof(float))); i++) {
 		pVertices[i].normal = glm::normalize(pVertices[i].normal);
-		std::cout << pVertices[i].normal.x << " " << pVertices[i].normal.y << " " << pVertices[i].normal.z << "\n";
+		//std::cout << pVertices[i].normal.x << " " << pVertices[i].normal.y << " " << pVertices[i].normal.z << "\n";
 	}
 }
 
@@ -67,6 +67,12 @@ ModelHandler::ModelHandler(GLuint _ShaderProgram, Vertex *_pVertices, unsigned i
 		fprintf(stderr, "Error with glGetUniformLocation\n");
 	}
 
+	gEyeWorldPosLocation = glGetUniformLocation(ShaderProgram, "gEyeWorldPos");
+	if (gEyeWorldPosLocation == -1)
+	{
+		fprintf(stderr, "Error with glGetUniformLocation\n");
+	}
+
 	ModelHandler::GetWorldTransformation();
 	m_CameraTransformation = camera->GetTransformation();
 	m_Transformation = m_CameraTransformation * m_WorldTransformation;
@@ -74,6 +80,7 @@ ModelHandler::ModelHandler(GLuint _ShaderProgram, Vertex *_pVertices, unsigned i
 	glUniformMatrix4fv(gWVPLocation, 1, GL_FALSE, &m_Transformation[0][0]);
 	glUniformMatrix4fv(gWorldLocation, 1, GL_FALSE, &m_WorldTransformation[0][0]);
 	glUniform1i(gSampler, 0);
+	glUniform3f(gEyeWorldPosLocation, camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
 
 	//CalcNormals();
 }
@@ -98,6 +105,7 @@ void ModelHandler::Animation(float deltaTime)
 
 	glUniformMatrix4fv(gWVPLocation, 1, GL_FALSE, &m_Transformation[0][0]);
 	glUniformMatrix4fv(gWorldLocation, 1, GL_FALSE, &m_WorldTransformation[0][0]);
+	glUniform3f(gEyeWorldPosLocation, camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
 }
 
 void ModelHandler::Draw()

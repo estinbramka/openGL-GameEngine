@@ -57,3 +57,8 @@ glm::mat4 Camera::GetTransformation()
 {
 	return m_ProjectionTransformation * glm::lookAt(position, position + front, up);
 }
+
+glm::vec3 Camera::GetPosition()
+{
+	return position;
+}

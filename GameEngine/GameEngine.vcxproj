@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
     <ClInclude Include="src\Definitions.h" />
+    <ClInclude Include="src\Lighting.h" />
     <ClInclude Include="src\ModelHandler.h" />
     <ClInclude Include="src\ShaderHandler.h" />
   </ItemGroup>
