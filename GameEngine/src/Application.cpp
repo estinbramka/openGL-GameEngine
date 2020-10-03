@@ -9,6 +9,7 @@
 #include "Camera.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include "Lighting.h"
 
 void ProcessInput(GLFWwindow* window);
 void Mouse_Callback(GLFWwindow* window, double xpos, double ypos);
@@ -83,24 +84,14 @@ int main(void)
 	modelHandler.LoadTextures("res/textures/test.png", GL_RGBA);
 
 	/*lighting test*/
-	GLuint m_dirLightColorLocation;
-	GLuint m_dirLightAmbientIntensityLocation;
-	GLuint m_dirLightLocationDirection;
-	GLuint m_dirLightLocationDiffuseIntensity;
 	GLuint m_matSpecularIntensityLocation;
 	GLuint m_matSpecularPowerLocation;
-	m_dirLightColorLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.Color");
-	m_dirLightAmbientIntensityLocation = glGetUniformLocation(shaderProgram, "gDirectionalLight.AmbientIntensity");
-	m_dirLightLocationDirection = glGetUniformLocation(shaderProgram, "gDirectionalLight.Direction");
-	m_dirLightLocationDiffuseIntensity = glGetUniformLocation(shaderProgram, "gDirectionalLight.DiffuseIntensity");
 	m_matSpecularIntensityLocation = glGetUniformLocation(shaderProgram, "gMatSpecularIntensity");
 	m_matSpecularPowerLocation = glGetUniformLocation(shaderProgram, "gSpecularPower");
-	glUniform3f(m_dirLightColorLocation, 1.0f, 1.0f, 1.0f);
-	glUniform1f(m_dirLightAmbientIntensityLocation, 0.1f);
-	glUniform3f(m_dirLightLocationDirection, 1.0f, 0.0f, 0.0f);
-	glUniform1f(m_dirLightLocationDiffuseIntensity, 0.75f);
 	glUniform1f(m_matSpecularIntensityLocation, 1.0f);
 	glUniform1f(m_matSpecularPowerLocation, 32);
+
+	Lighting lighting(shaderProgram);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
