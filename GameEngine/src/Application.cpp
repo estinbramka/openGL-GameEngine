@@ -10,6 +10,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "Lighting.h"
+//#include <assimp/Importer.hpp>
 
 void ProcessInput(GLFWwindow* window);
 void Mouse_Callback(GLFWwindow* window, double xpos, double ypos);
