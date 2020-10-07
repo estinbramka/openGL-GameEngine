@@ -8,6 +8,8 @@
 #include "Definitions.h"
 #include "Camera.h"
 #include <stb_image.h>
+#include "Texture.h"
+#include"Mesh.h"
 
 class ModelHandler
 {
@@ -23,7 +25,8 @@ private:
 	glm::mat4 m_CameraTransformation;
 	glm::mat4 m_Transformation;
 	Camera *camera;
-	GLuint texture, gSampler;
+	GLuint gSampler;
+	Texture *textureObj;
 	void CalcNormals();
 
 public:

@@ -10,6 +10,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "Lighting.h"
+#include "Mesh.h"
 //#include <assimp/Importer.hpp>
 
 void ProcessInput(GLFWwindow* window);
@@ -58,10 +59,10 @@ int main(void)
 	};*/
 
 	Vertex Vertices[] = {
-		{glm::vec3(-1.0f, -1.0f,  0.5773f),	glm::vec2(0.0f, 0.0f)},
-		{glm::vec3(0.0f, -1.0f, -1.15475f),	glm::vec2(0.5f, 0.0f)},
-		{glm::vec3(1.0f, -1.0f,  0.5773f),	glm::vec2(1.0f, 0.0f)},
-		{glm::vec3(0.0f,  1.0f,  0.0f),		glm::vec2(0.5f, 1.0f)}
+		{glm::vec3(-1.0f, -1.0f,  0.5773f),	glm::vec2(0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  0.0f)},
+		{glm::vec3(0.0f, -1.0f, -1.15475f),	glm::vec2(0.5f, 0.0f), glm::vec3(0.0f,  0.0f,  0.0f)},
+		{glm::vec3(1.0f, -1.0f,  0.5773f),	glm::vec2(1.0f, 0.0f), glm::vec3(0.0f,  0.0f,  0.0f)},
+		{glm::vec3(0.0f,  1.0f,  0.0f),		glm::vec2(0.5f, 1.0f), glm::vec3(0.0f,  0.0f,  0.0f)}
 	};
 	
 	unsigned int Indices[] = { 0, 3, 1,
