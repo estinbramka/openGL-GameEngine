@@ -82,8 +82,9 @@ int main(void)
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 
-	modelHandler.LoadTextures("res/textures/test.png", GL_RGBA);
+	modelHandler.LoadTextures("./res/textures/test.png", GL_RGBA);
 
 	/*lighting test*/
 	GLuint m_matSpecularIntensityLocation;
@@ -94,6 +95,8 @@ int main(void)
 	glUniform1f(m_matSpecularPowerLocation, 32);
 
 	Lighting lighting(shaderProgram);
+	Mesh mesh;
+	mesh.LoadMesh("./res/meshes/ufo/Low_poly_UFO.3DS");
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
@@ -108,11 +111,12 @@ int main(void)
 		ProcessInput(window);
 
 		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		modelHandler.Animation(deltaTime);
 		modelHandler.Draw();
+		mesh.Render();
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/* Swap front and back buffers */

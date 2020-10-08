@@ -141,6 +141,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\fs.shader" />
+    <None Include="res\meshes\phoenix\phoenix.pcx" />
+    <None Include="res\meshes\phoenix\phoenix_ugv.md2" />
+    <None Include="res\meshes\ufo\Low_poly_UFO.3DS" />
     <None Include="res\vs.shader">
       <FileType>Document</FileType>
     </None>
@@ -155,6 +158,12 @@
     <ClInclude Include="src\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="res\meshes\ufo\UFO_DIFF.png" />
+    <Image Include="res\meshes\ufo\ufo_diffuse2.png" />
+    <Image Include="res\meshes\ufo\ufo_diffuse2_glow.png" />
+    <Image Include="res\meshes\ufo\ufo_diffuse_glow.png" />
+    <Image Include="res\meshes\ufo\ufo_normal.png" />
+    <Image Include="res\meshes\ufo\ufo_spec.png" />
     <Image Include="res\textures\test.png" />
     <Image Include="res\textures\wall.jpg" />
   </ItemGroup>

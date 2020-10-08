@@ -74,12 +74,12 @@ void ModelHandler::Animation(float deltaTime)
 {
 	static float Scale = 0.0f;
 
-	Scale += deltaTime*150;
+	Scale += deltaTime*50;
 	
-	//ModelHandler::Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
+	ModelHandler::Scale(0.07, 0.07, 0.07);
 	//ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
 	//ModelHandler::Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
-	ModelHandler::Rotate(0.0f, Scale, 0.0f);
+	ModelHandler::Rotate(-90.0f, Scale, 0.0f);
 	ModelHandler::WorldPos(0.0f, 0.0f, 3.0f);
 
 	ModelHandler::GetWorldTransformation();

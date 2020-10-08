@@ -40,6 +40,9 @@
   <ItemGroup>
     <None Include="res\vs.shader" />
     <None Include="res\fs.shader" />
+    <None Include="res\meshes\phoenix\phoenix.pcx" />
+    <None Include="res\meshes\phoenix\phoenix_ugv.md2" />
+    <None Include="res\meshes\ufo\Low_poly_UFO.3DS" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ShaderHandler.h">
@@ -69,6 +72,24 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\test.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\meshes\ufo\ufo_diffuse_glow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\meshes\ufo\ufo_diffuse2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\meshes\ufo\ufo_diffuse2_glow.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\meshes\ufo\ufo_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\meshes\ufo\ufo_spec.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\meshes\ufo\UFO_DIFF.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
