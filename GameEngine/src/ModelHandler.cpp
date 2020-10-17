@@ -70,22 +70,38 @@ ModelHandler::ModelHandler(GLuint _ShaderProgram, Vertex *_pVertices, unsigned i
 	glUniform3f(gEyeWorldPosLocation, camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
 }
 
-void ModelHandler::Animation(float deltaTime)
+ModelHandler::ModelHandler(GLuint _ShaderProgram, const std::string & Filename, Camera * _camera)
 {
-	static float Scale = 0.0f;
+	ShaderProgram = _ShaderProgram;
+	pVertices = NULL;
+	pIndices = NULL;
+	sizeVertices = NULL;
+	sizeIndices = NULL;
+	camera = _camera;
 
-	Scale += deltaTime*50;
-	
-	ModelHandler::Scale(0.07, 0.07, 0.07);
-	//ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
-	//ModelHandler::Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
-	ModelHandler::Rotate(-90.0f, Scale, 0.0f);
-	ModelHandler::WorldPos(0.0f, 0.0f, 3.0f);
+	m_Scale = glm::vec3(1.0f, 1.0f, 1.0f);
+	m_WorldPos = glm::vec3(0.0f, 0.0f, 0.0f);
+	m_Rotate = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	LoadMesh(Filename);
+
+	gWVPLocation = glGetUniformLocation(ShaderProgram, "gWVP");
+	gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
+	gSampler = glGetUniformLocation(ShaderProgram, "gSampler");
+	gEyeWorldPosLocation = glGetUniformLocation(ShaderProgram, "gEyeWorldPos");
+
+	if (
+		gWVPLocation == -1 ||
+		gWorldLocation == -1 ||
+		gSampler == -1 ||
+		gEyeWorldPosLocation == -1
+		)
+	{
+		fprintf(stderr, "Error with glGetUniformLocation in ModelHandler class\n");
+	}
 
 	ModelHandler::GetWorldTransformation();
-
 	m_CameraTransformation = camera->GetTransformation();
-
 	m_Transformation = m_CameraTransformation * m_WorldTransformation;
 
 	glUniformMatrix4fv(gWVPLocation, 1, GL_FALSE, &m_Transformation[0][0]);
@@ -93,22 +109,50 @@ void ModelHandler::Animation(float deltaTime)
 	glUniform3f(gEyeWorldPosLocation, camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
 }
 
+void ModelHandler::Animation(float deltaTime)
+{
+	static float Scale = 0.0f;
+
+	Scale += deltaTime*50;
+	
+	//ModelHandler::Scale(0.07, 0.07, 0.07);
+	//ModelHandler::WorldPos(sinf(Scale), 0.0f, 0.0f);
+	//ModelHandler::Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+	ModelHandler::Rotate(-90.0f, Scale, 0.0f);
+	//ModelHandler::WorldPos(0.0f, 0.0f, 3.0f);
+}
+
 void ModelHandler::Draw()
 {
-	glUseProgram(ShaderProgram);
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
-	glEnableVertexAttribArray(2);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
-	textureObj->Bind(GL_TEXTURE0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+	ModelHandler::GetWorldTransformation();
+	m_CameraTransformation = camera->GetTransformation();
+	m_Transformation = m_CameraTransformation * m_WorldTransformation;
+
+	glUniformMatrix4fv(gWVPLocation, 1, GL_FALSE, &m_Transformation[0][0]);
+	glUniformMatrix4fv(gWorldLocation, 1, GL_FALSE, &m_WorldTransformation[0][0]);
+	glUniform3f(gEyeWorldPosLocation, camera->GetPosition().x, camera->GetPosition().y, camera->GetPosition().z);
+
+	if (pVertices != NULL)
+	{
+		glUseProgram(ShaderProgram);
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+		textureObj->Bind(GL_TEXTURE0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+	}
+	else
+	{
+		Render();
+	}
 }
 
 void ModelHandler::Scale(float x, float y, float z)

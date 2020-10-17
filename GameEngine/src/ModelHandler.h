@@ -11,7 +11,7 @@
 #include "Texture.h"
 #include"Mesh.h"
 
-class ModelHandler
+class ModelHandler : public Mesh
 {
 private:
 	GLuint ShaderProgram;
@@ -30,7 +30,8 @@ private:
 	void CalcNormals();
 
 public:
-	ModelHandler(GLuint _ShaderProgram, Vertex *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *camera);
+	ModelHandler(GLuint _ShaderProgram, Vertex *_pVertices, unsigned int *_pIndices, size_t _sizeVertices, size_t _sizeIndices, Camera *_camera);
+	ModelHandler(GLuint _ShaderProgram, const std::string& Filename, Camera *_camera);
 	void Animation(float deltaTime);
 	void Draw();
 	void Scale(float x, float y, float z);

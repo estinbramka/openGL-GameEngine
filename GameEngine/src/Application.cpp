@@ -11,7 +11,6 @@
 #include <stb_image.h>
 #include "Lighting.h"
 #include "Mesh.h"
-//#include <assimp/Importer.hpp>
 
 void ProcessInput(GLFWwindow* window);
 void Mouse_Callback(GLFWwindow* window, double xpos, double ypos);
@@ -50,13 +49,6 @@ int main(void)
 	printf("GL version: %s\n", glGetString(GL_VERSION));
 
 	//----------------------------------------------------------------------------------------------------------------------------
-	/*float Vertices[4*3+4*2]= {
-		// positions                 // texture coords
-		-1.0f, -1.0f, 0.5773f,		 0.0f, 0.0f, // top right
-		0.0f, -1.0f, -1.15475f,		 0.5f, 0.0f, // bottom right
-		1.0f, -1.0f, 0.5773f,		 1.0f, 0.0f, // bottom left
-		0.0f, 1.0f, 0.0f,			 0.5f, 1.0f  // top left 
-	};*/
 
 	Vertex Vertices[] = {
 		{glm::vec3(-1.0f, -1.0f,  0.5773f),	glm::vec2(0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  0.0f)},
@@ -86,17 +78,20 @@ int main(void)
 
 	modelHandler.LoadTextures("./res/textures/test.png", GL_RGBA);
 
-	/*lighting test*/
+	/*lighting*/
 	GLuint m_matSpecularIntensityLocation;
 	GLuint m_matSpecularPowerLocation;
 	m_matSpecularIntensityLocation = glGetUniformLocation(shaderProgram, "gMatSpecularIntensity");
 	m_matSpecularPowerLocation = glGetUniformLocation(shaderProgram, "gSpecularPower");
-	glUniform1f(m_matSpecularIntensityLocation, 1.0f);
-	glUniform1f(m_matSpecularPowerLocation, 32);
+	glUniform1f(m_matSpecularIntensityLocation, 0.1f);
+	glUniform1f(m_matSpecularPowerLocation, 1);
 
 	Lighting lighting(shaderProgram);
-	Mesh mesh;
-	mesh.LoadMesh("./res/meshes/ufo/Low_poly_UFO.3DS");
+	//Mesh mesh;
+	//mesh.LoadMesh("./res/meshes/ufo/Low_poly_UFO.3DS");
+	ModelHandler UFO(shaderProgram, "./res/meshes/ufo/Low_poly_UFO.3DS", camera);
+	UFO.Scale(0.07, 0.07, 0.07);
+	modelHandler.WorldPos(3, 0, 0);
 	//----------------------------------------------------------------------------------------------------------------------------
 
 	/* Loop until the user closes the window */
@@ -116,7 +111,9 @@ int main(void)
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		modelHandler.Animation(deltaTime);
 		modelHandler.Draw();
-		mesh.Render();
+		UFO.Animation(deltaTime);
+		UFO.Draw();
+		//mesh.Render();
 		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		/* Swap front and back buffers */
